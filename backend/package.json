@@ -1,0 +1,23 @@
+{
+  "name": "apirestnodejs",
+  "version": "1.0.0",
+  "description": "creation of an API REST",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/braulio-flores/API-REST-NODE-JS.git"
+  },
+  "author": "Braulio Flores",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/braulio-flores/API-REST-NODE-JS/issues"
+  },
+  "homepage": "https://github.com/braulio-flores/API-REST-NODE-JS#readme",
+  "dependencies": {
+    "body-parser": "^1.19.1",
+    "express": "^4.17.2"
+  }
+}
