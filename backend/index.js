@@ -4,6 +4,17 @@ let app = express();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
+// Configurar cabeceras y cors
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+    res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
+    // res.header('Content-type', 'application/x-www-form-urlencoded; charset=UTF-8');
+    next();
+});
+
+// app.header = "Access-Control-Allow-Origin", "*";
 
 let usuarios = [{
     nombre:'Juan',
@@ -24,10 +35,31 @@ app.post("/usuarios",(req,res)=>{
     }
 
     usuarios.push(usuario);
+    res.header("Access-Control-Allow-Origin", "*");
     res.send({sucess:1,usuario:usuario});
 });
 
-app.get("/usuarios/:id",(req,res)=>{
+// ESTA OPCION SE MODIFICO PARA BUSCAR USUARIOS POR NOMBRE Y COINCIDENCIAS en lugar de por iD
+app.get("/usuarios/:includes",(req,res)=>{    
+        if (req.params.includes=='') {
+            res.send(usuarios);
+        } else {
+            let includUsers = [];
+            usuarios.map((item,i)=>{
+                if (item.nombre.includes(req.params.includes)) {
+                    includUsers.push(item);
+                }
+            });
+            if (includUsers.length==0) {
+                res.send([{users:'any'}]);
+            }else{
+                res.send(includUsers);
+            }
+        }
+})
+
+// PARA BUSCAR POR "ID"
+app.get("/usuarios/id/:id",(req,res)=>{
     if (req.params.id>usuarios.length-1) {
         res.send({error:1});
     }else{
@@ -36,6 +68,7 @@ app.get("/usuarios/:id",(req,res)=>{
 })
 
 app.get("/usuarios",(req,res)=>{
+    // res.header(Access-Control-Allow-Origin, '*');
     res.send(usuarios);
 })
 
@@ -49,22 +82,25 @@ app.put("/usuarios/:id",(req,res)=>{
     }
 
     usuarios[req.params.id] = usuario;
+    res.header("Access-Control-Allow-Origin", "*");
     res.send({modified:1,usuario:usuario});
 })
 
 // DELETE USER
 app.delete("/usuarios/:id",(req,res)=>{
     if (req.params.id>usuarios.length-1) {
+        res.header("Access-Control-Allow-Origin", "*");
         res.send({error:1});
     }else{
         usuarios.splice( req.params.id, 1 );
+        res.header("Access-Control-Allow-Origin", "*"); 
         res.send({deleted:1});
     }
 })
 
 app.get("/",(req,res)=>{
     console.log("peticion recibida");
-    // res.send('peticion recibida'); //!RESPUESTA RAPIDA
+    res.send('peticion recibida'); //!RESPUESTA RAPIDA
 })
 
 app.listen(8888,()=>{
