@@ -15,6 +15,14 @@ export default class Form extends React.Component {
       this.handleSubmit = this.handleSubmit.bind(this);
     }
   
+    componentDidMount(){
+      if (JSON.stringify(this.props.userM)==='') {
+        console.log('soy null');
+      }else{
+        console.log('no soy')
+      }
+    }
+
     handleChangeName(e) {        
       this.setState({
         nombre: document.getElementById('inputName').value,
@@ -34,12 +42,14 @@ export default class Form extends React.Component {
       event.preventDefault();
       // this.props.onchan(usuario);      
     }
-  
+
+
     render() {
+      // userM
       return (
         <>
-          <h2>Agregar Usuario</h2>
-        <form onSubmit={this.handleSubmit}>
+          <h2>Agregar Usuario </h2>
+          <form onSubmit={this.handleSubmit}>
             <label htmlFor="inputName">Nombre: </label>
             <input type="text" id="inputName" value={this.state.nombre} onChange={this.handleChangeName}/><br /><br />
             <label htmlFor="inputApellido">Apellido: </label>
@@ -53,7 +63,7 @@ export default class Form extends React.Component {
               <option value="Honduras">Honduras</option>
             </select>    <br /><br />
           <input type="submit" value="Submit" />
-          <h1>{this.props.usuarios}</h1>
+          <h1>{JSON.stringify(this.props.userM)}</h1>
         </form>
         </>        
       );

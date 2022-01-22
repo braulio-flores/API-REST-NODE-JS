@@ -9,6 +9,8 @@ export default function TableInfo(props){
                         <td>Apellido</td>
                         <td>Fecha Nacimiento</td>
                         <td>Pais</td>
+                        <td>Actualizar</td>
+                        <td>Eliminar</td>
                     </tr>
                 </thead>
                 <tbody>

@@ -10,11 +10,14 @@ export default class MainAJAXGetUsers extends Component{
         super(props);
         this.state = {
             usuarios:[],
-            busqueda:''
+            updateAdd:'1',
+            userToModify:[]
         };
           
         this.filtrarUsuarios = this.filtrarUsuarios.bind(this);
         this.addUsuario = this.addUsuario.bind(this);
+        this.getInfoToModify = this.getInfoToModify.bind(this);
+        this.addUserButton = this.addUserButton.bind(this);
     }
 
     componentDidMount(){
@@ -42,8 +45,7 @@ export default class MainAJAXGetUsers extends Component{
     }
 
     filtrarUsuarios(busqueda){
-        // alert(this.state.filter);
-        // this.setState({busqueda:busqueda});
+        
         // POR EL MOMENTO DEJAREMOS EL ESTADO DEL FILTRO PERO EN REALIDAD NO ES NECESARIO
         let url = `http://localhost:8888/usuarios/${busqueda}`;
         axios({
@@ -51,18 +53,7 @@ export default class MainAJAXGetUsers extends Component{
             url:url,
             responseType:'json'
         }).then(res=>{
-            // let newUsers = this.state.usuarios;
-            
-            // res.data.map((item,i)=>{
-                
-            //     newUsers.push(item);
-            //     return({sucess:1});
-                
-            // })
-            // this.setState({
-            //     usuarios: newUsers
-            // });
-            console.log(res.data);
+            // console.log(res.data);
             this.setState({usuarios:res.data});
             console.log(this.state.usuarios);
         }).catch(error=>{
@@ -90,6 +81,29 @@ export default class MainAJAXGetUsers extends Component{
         });
     }
 
+    getInfoToModify(usuario){
+        let url = `http://localhost:8888/usuarios/id/${usuario}`;
+        axios({
+            method:'GET',
+            url:url,
+            responseType:'json',
+            data:usuario
+        }).then(res=>{
+            // console.log(res.data);
+            // let userToModiFy = res.data;
+            // addUsr.push(usuario);
+            this.setState({userToModify:res.data,updateAdd:0});
+            // this.setState({usuarios:res.data});
+            // console.log(this.state);
+        }).catch(error=>{
+            console.error(error);
+        });
+    }
+
+    addUserButton(){        
+        this.setState({updateAdd:1});
+    }
+
     render(){
         return(
             <>
@@ -98,13 +112,14 @@ export default class MainAJAXGetUsers extends Component{
                 <TableInfo>
                     {this.state.usuarios.map((item,i)=>{
                         return(
-                                <ShowInfo usuario={item} key={i}/>  
+                                <ShowInfo usuario={item} key={i} id={i} oncli={this.getInfoToModify}/>  
                         );
                     })}
                 </TableInfo>
                 <br></br>
                 <br />
-                <FormPOST onchan={this.addUsuario}/>
+                <FormPOST onchan={this.addUsuario} statusAddOrUpdate={this.state.updateAdd} userM={this.state.userToModify}
+                onclic={this.addUserButton}/>
             </>           
         )
     }
