@@ -3,9 +3,10 @@ let bodyParser = require('body-parser');
 let app = express();
 let cors = require('cors');
 let usuariosRouter = require('./routes/usuarios-router');
+let usuariosDB = require('./routes/usuarios-router-db');
 
-// VAMOS A IMPORTAR LOS MODULOS QUE CREAMOS EN MODULES
-var testModule = require('./modules/test-module');
+let db = require('./modules/db-module'); //EN AUTOMATICO HACE LA PETICION
+
 app.use(cors()); //PERMITE PETICIONES DE OTROS ORIGENES PERO NO ME SIRVE
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
@@ -15,12 +16,13 @@ app.use('/usuarios',usuariosRouter); //IMPORTANTE QUE VENGA DESPUES DEL BODY PAR
 // BASICAMENTE ES UN MIDLEWARE EN DONDE CUALQUIER PETICION QUE VENGA CON ESA RUTA DE INICIO LO VA A ENRUTAR A NUESTRA ROUTE
 //EN EL ARCHIVO DEL ENRUTADOR DEBERIAMOS QUITAR EN LAS RUTAS LOS /usuarios POR EJEMPLO, LO DEJARIAMOS COMO /
 //YA QUE DESDE AQUI EN EL MIDDLEWARE ESTAMOS DICIENDO QUE YA ES USUARIIOS
+app.use('/usuariosdb',usuariosDB);
 
 // app.header = "Access-Control-Allow-Origin", "*";
 app.get("/",(req,res)=>{
     console.log("peticion recibida");
-    // res.send('peticion recibida'); //!RESPUESTA RAPIDA
-    res.send(testModule.mostrarMensaje());
+    res.send('peticion recibida'); //!RESPUESTA RAPIDA
+    // res.send(testModule.mostrarMensaje());
 })
 
 app.listen(8888,()=>{

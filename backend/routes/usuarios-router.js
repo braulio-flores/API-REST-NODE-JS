@@ -4,6 +4,7 @@ let bodyParser = require('body-parser');
 let router = express.Router(); //LO DE ARRIBA LO SUSTITUIMOS POR ROUTE, YA QUE AQUI SE GESTIONAN RUTAS 
 // Y APP SOLO HAY UNA
 
+
 let usuarios = [{
     nombre:'Juan',
     apellido:'Flores',
